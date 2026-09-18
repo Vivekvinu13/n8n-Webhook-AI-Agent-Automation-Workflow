@@ -1,0 +1,451 @@
+{
+  "name": "Web App",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Input: {{ $json.query.message }}",
+        "options": {
+          "systemMessage": "=You are a helpful tool calling agent, call the tools when ever user ask you to do the task.\n\nMy tool mapping list.\nGmail - When user ask send email: call this tool\nGoogle Sheet - When user ask to update in the sheet call this tool.\nGoogle Calendar - User wants to block or schedule the event, call this tool.\nGoogle Docs - When user ask to create a document, use this.\nSerpapi - When user wants to research from the internet.\n\nCurrent time: {{ $now.setZone('Asia/Kolkata').toFormat('dd/MM/yyyy HH:mm:ss') }}",
+          "maxIterations": 5,
+          "enableStreaming": true
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        288,
+        16
+      ],
+      "id": "ccab3178-95c7-4adb-b202-554c682be043",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -224,
+        272
+      ],
+      "id": "2dac7917-adb0-481f-9ae2-c06c2023ee1a",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "MP5Ad7CbBnhLgRHj",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=webapp1"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -32,
+        288
+      ],
+      "id": "fc2e729f-9b1f-4732-b69b-bfe52ff4b9f1",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        160,
+        256
+      ],
+      "id": "cfba4a67-7d0e-4b35-bebc-1522afb9536a",
+      "name": "Send a message in Gmail",
+      "webhookId": "95049658-f561-4aa6-bb7e-6ecd24b95f99",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "iTW7BY7DM9q3hqrL",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1i7eB0Sw5zqSk2ZZeu7UDAj1VKWPxRsNjqYMCPepPbeY",
+          "mode": "list",
+          "cachedResultName": "student_enrollment_raw",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1i7eB0Sw5zqSk2ZZeu7UDAj1VKWPxRsNjqYMCPepPbeY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 563695428,
+          "mode": "list",
+          "cachedResultName": "student_enrollment_raw",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1i7eB0Sw5zqSk2ZZeu7UDAj1VKWPxRsNjqYMCPepPbeY/edit#gid=563695428"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Student_ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Student_ID', ``, 'string') }}",
+            "Name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Name', ``, 'string') }}",
+            "Email": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Email', ``, 'string') }}",
+            "Phone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Phone', ``, 'string') }}",
+            "Course": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Course', ``, 'string') }}",
+            "Fee_Paid": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Fee_Paid', ``, 'string') }}",
+            "City": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('City', ``, 'string') }}",
+            "Enrolled_Date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Enrolled_Date', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Student_ID",
+              "displayName": "Student_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Course",
+              "displayName": "Course",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Fee_Paid",
+              "displayName": "Fee_Paid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "City",
+              "displayName": "City",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Enrolled_Date",
+              "displayName": "Enrolled_Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        352,
+        240
+      ],
+      "id": "1610b4b1-26d6-483f-8fa3-2485f3e4d01e",
+      "name": "Append row in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2a30OkcKzNBThI8D",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "vinu.v4@gmail.com",
+          "mode": "list",
+          "cachedResultName": "vinu.v4@gmail.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {
+          "location": "600122"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        560,
+        256
+      ],
+      "id": "8123edc7-4b07-4c9e-bfef-f28f849350ee",
+      "name": "Create an event in Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "IpLXQXklyR2O5Adi",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "folderId": "default",
+        "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}"
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        736,
+        224
+      ],
+      "id": "5eb34943-303c-4214-9f07-2b103b659aaa",
+      "name": "Create a document in Google Docs",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "NtsLptoWYbgvW3Gm",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "https://docs.google.com/document/d/1PbXLZVlDPRspfgdMp65H0gDhQUX1XKxxT1Q6a-3fG_A/edit?tab=t.0",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "insert",
+              "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('actionFields0_Old_Text', ``, 'string') }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        1088,
+        256
+      ],
+      "id": "03ba8859-ebc4-4e70-80b4-11885300c816",
+      "name": "Update a document in Google Docs",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "NtsLptoWYbgvW3Gm",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "amazon",
+        "k": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Search_Query__k_', ``, 'string') }}",
+        "amazon_domain": "amazon.in",
+        "additionalFields": {
+          "delivery_zip": "600122"
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-serpapi.serpApiTool",
+      "typeVersion": 1,
+      "position": [
+        912,
+        240
+      ],
+      "id": "2af45329-d745-4e99-9e43-9a2854128475",
+      "name": "Amazon search in SerpApi",
+      "credentials": {
+        "serpApi": {
+          "id": "xatN85Ia4TXqr16a",
+          "name": "SerpApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "multiagent",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        80,
+        16
+      ],
+      "id": "a114dc94-6ec3-4390-b84e-f9b706d4334f",
+      "name": "Webhook",
+      "webhookId": "9d0ddd12-4621-41aa-91f6-5dc8ea190315"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "Create a document in Google Docs": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a document in Google Docs": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Amazon search in SerpApi": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "475b81a2-24fb-443e-a488-d5cbee3cb8ba",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "25274c1d00422e204d794f15b484615284fd746296e5c860f3e8d407d9abf833"
+  },
+  "nodeGroups": [],
+  "id": "NvN4t4ubDNGyN3lD",
+  "tags": []
+}
